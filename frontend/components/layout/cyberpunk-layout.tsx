@@ -10,6 +10,7 @@ import {
   Zap,
   ChevronRight,
   LogOut,
+  LogIn,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -30,7 +31,7 @@ interface CyberpunkLayoutProps {
 
 // Constants
 const NAV_ITEMS: NavItem[] = [
-  { icon: LayoutDashboard, label: "Dashboard", href: "/" },
+  { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
   { icon: Users, label: "Personnel", href: "/personnel" },
   { icon: Activity, label: "Analytics", href: "/analytics" },
   { icon: Brain, label: "AI Insights", href: "/insights" },
@@ -111,10 +112,39 @@ function NavButton({
   );
 }
 
-function UserProfile({ isExpanded }: { isExpanded: boolean }) {
-  const { user, logout } = useAuth();
+function LoginButton({ isExpanded }: { isExpanded: boolean }) {
+  const { login } = useAuth();
 
-  if (!user) return null;
+  return (
+    <div className="px-3 mb-4">
+      <motion.button
+        onClick={login}
+        className={cn(
+          "w-full flex items-center gap-3 px-3 py-3 rounded-xl",
+          "bg-gradient-to-r from-purple-500 to-teal-500",
+          "text-white font-medium",
+          "hover:opacity-90 transition-opacity"
+        )}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        <LogIn className="w-5 h-5 flex-shrink-0" />
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isExpanded ? 1 : 0 }}
+          className="whitespace-nowrap text-sm"
+        >
+          Sign In
+        </motion.span>
+      </motion.button>
+    </div>
+  );
+}
+
+function UserProfile({ isExpanded }: { isExpanded: boolean }) {
+  const { user, logout, isAuthenticated } = useAuth();
+
+  if (!isAuthenticated || !user) return null;
 
   return (
     <div className="px-3 mb-4">
@@ -161,6 +191,18 @@ function UserProfile({ isExpanded }: { isExpanded: boolean }) {
         )}
       </div>
     </div>
+  );
+}
+
+function AuthSection({ isExpanded }: { isExpanded: boolean }) {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) return null;
+
+  return isAuthenticated ? (
+    <UserProfile isExpanded={isExpanded} />
+  ) : (
+    <LoginButton isExpanded={isExpanded} />
   );
 }
 
@@ -245,7 +287,7 @@ export function CyberpunkLayout({ children }: CyberpunkLayoutProps) {
           </ul>
         </nav>
 
-        <UserProfile isExpanded={isExpanded} />
+        <AuthSection isExpanded={isExpanded} />
         <StatusIndicator isExpanded={isExpanded} />
       </motion.aside>
 

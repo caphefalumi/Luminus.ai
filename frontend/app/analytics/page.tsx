@@ -1,6 +1,7 @@
 "use client";
 
 import { CyberpunkLayout } from "@/components/layout/cyberpunk-layout";
+import { RequireAuth } from "@/components/auth/require-auth";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import {
@@ -53,19 +54,22 @@ export default function AnalyticsPage() {
 
   if (loading || !analytics) {
     return (
-      <CyberpunkLayout>
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
-          <span className="ml-3 text-gray-400">Loading analytics from server...</span>
-        </div>
-      </CyberpunkLayout>
+      <RequireAuth>
+        <CyberpunkLayout>
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
+            <span className="ml-3 text-gray-400">Loading analytics from server...</span>
+          </div>
+        </CyberpunkLayout>
+      </RequireAuth>
     );
   }
 
   const stats = analytics.overview;
 
   return (
-    <CyberpunkLayout>
+    <RequireAuth>
+      <CyberpunkLayout>
       <div className="space-y-6">
         {/* Header */}
         <div>
@@ -235,6 +239,7 @@ export default function AnalyticsPage() {
           </div>
         </div>
       </div>
-    </CyberpunkLayout>
+      </CyberpunkLayout>
+    </RequireAuth>
   );
 }

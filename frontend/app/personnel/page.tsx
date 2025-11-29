@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { CyberpunkLayout } from "@/components/layout/cyberpunk-layout";
+import { RequireAuth } from "@/components/auth/require-auth";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { Search, ChevronDown, AlertTriangle, MapPin, Mail, Building } from "lucide-react";

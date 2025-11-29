@@ -1,6 +1,7 @@
 "use client";
 
 import { CyberpunkLayout } from "@/components/layout/cyberpunk-layout";
+import { RequireAuth } from "@/components/auth/require-auth";
 import { cn } from "@/lib/utils";
 import {
   Bell, Shield, Palette, Database, Download, Upload,

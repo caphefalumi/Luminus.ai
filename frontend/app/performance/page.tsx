@@ -1,6 +1,7 @@
 "use client";
 
 import { CyberpunkLayout } from "@/components/layout/cyberpunk-layout";
+import { RequireAuth } from "@/components/auth/require-auth";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { Trophy, Medal, Award, Star, TrendingUp, Target, ArrowUp, ArrowDown, Loader2 } from "lucide-react";
@@ -32,12 +33,14 @@ export default function PerformancePage() {
 
   if (loading || !performance) {
     return (
-      <CyberpunkLayout>
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
-          <span className="ml-3 text-gray-400">Loading performance data from server...</span>
-        </div>
-      </CyberpunkLayout>
+      <RequireAuth>
+        <CyberpunkLayout>
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
+            <span className="ml-3 text-gray-400">Loading performance data from server...</span>
+          </div>
+        </CyberpunkLayout>
+      </RequireAuth>
     );
   }
 
@@ -51,12 +54,13 @@ export default function PerformancePage() {
   };
 
   return (
-    <CyberpunkLayout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold text-white">Performance Leaderboard</h1>
-          <p className="text-gray-400 mt-1">Track and celebrate top performers</p>
+    <RequireAuth>
+      <CyberpunkLayout>
+        <div className="space-y-6">
+          {/* Header */}
+          <div>
+            <h1 className="text-3xl font-bold text-white">Performance Leaderboard</h1>
+            <p className="text-gray-400 mt-1">Track and celebrate top performers</p>
         </div>
 
         {/* Top 3 Podium */}
@@ -215,8 +219,9 @@ export default function PerformancePage() {
               <p className="text-gray-500 text-sm">{metric.label}</p>
             </div>
           ))}
+          </div>
         </div>
-      </div>
-    </CyberpunkLayout>
+      </CyberpunkLayout>
+    </RequireAuth>
   );
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from '../schemas/user.schema';
+import * as crypto from 'crypto';
 
 export interface GoogleUser {
   googleId: string;
@@ -13,17 +13,13 @@ export interface GoogleUser {
   refreshToken: string;
 }
 
-export interface JwtPayload {
-  sub: string;
-  email: string;
-  name: string;
-}
+// Simple in-memory token store (use Redis in production)
+const tokenStore = new Map<string, string>(); // token -> oderId
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private jwtService: JwtService,
   ) {}
 
   async validateGoogleUser(googleUser: GoogleUser): Promise<UserDocument> {
@@ -32,7 +28,6 @@ export class AuthService {
     let user = await this.userModel.findOne({ googleId });
 
     if (!user) {
-      // Create new user (admin)
       user = await this.userModel.create({
         googleId,
         email,
@@ -43,7 +38,6 @@ export class AuthService {
         role: 'admin',
       });
     } else {
-      // Update existing user
       user.accessToken = accessToken;
       user.refreshToken = refreshToken;
       user.name = name;
@@ -54,14 +48,16 @@ export class AuthService {
     return user;
   }
 
-  generateJwt(user: UserDocument): string {
-    const payload: JwtPayload = {
-      sub: user._id.toString(),
-      email: user.email,
-      name: user.name,
-    };
+  generateToken(user: UserDocument): string {
+    const token = crypto.randomBytes(32).toString('hex');
+    tokenStore.set(token, user._id.toString());
+    return token;
+  }
 
-    return this.jwtService.sign(payload);
+  async getUserByToken(token: string): Promise<UserDocument | null> {
+    const oderId = tokenStore.get(token);
+    if (!oderId) return null;
+    return this.userModel.findById(oderId);
   }
 
   async findUserById(id: string): Promise<UserDocument | null> {
@@ -70,5 +66,9 @@ export class AuthService {
 
   async findUserByEmail(email: string): Promise<UserDocument | null> {
     return this.userModel.findOne({ email });
+  }
+
+  invalidateToken(token: string): void {
+    tokenStore.delete(token);
   }
 }

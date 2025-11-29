@@ -115,7 +115,7 @@ export default function LandingPage() {
             Transform your HR analytics with cutting-edge AI. Visualize team dynamics,
             predict burnout, and discover hidden talent in your organization.
           </p>
-          <div className="flex items-center justify-center gap-4 flex-wrap">
+          <div className="flex items-center justify-center gap-4">
             <motion.button
               onClick={login}
               className="flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-purple-500 to-teal-500 text-white font-semibold text-lg hover:opacity-90 transition-opacity"

@@ -1,6 +1,7 @@
 "use client";
 
 import { CyberpunkLayout } from "@/components/layout/cyberpunk-layout";
+import { RequireAuth } from "@/components/auth/require-auth";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import {
@@ -41,12 +42,14 @@ export default function InsightsPage() {
 
   if (loading || !insights) {
     return (
-      <CyberpunkLayout>
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
-          <span className="ml-3 text-gray-400">Loading AI insights from server...</span>
-        </div>
-      </CyberpunkLayout>
+      <RequireAuth>
+        <CyberpunkLayout>
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <Loader2 className="w-8 h-8 text-purple-400 animate-spin" />
+            <span className="ml-3 text-gray-400">Loading AI insights from server...</span>
+          </div>
+        </CyberpunkLayout>
+      </RequireAuth>
     );
   }
 
@@ -71,12 +74,13 @@ export default function InsightsPage() {
   };
 
   return (
-    <CyberpunkLayout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-teal-500/20 border border-purple-500/30">
-            <Brain className="w-6 h-6 text-purple-400" />
+    <RequireAuth>
+      <CyberpunkLayout>
+        <div className="space-y-6">
+          {/* Header */}
+          <div className="flex items-center gap-3">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-teal-500/20 border border-purple-500/30">
+              <Brain className="w-6 h-6 text-purple-400" />
           </div>
           <div>
             <h1 className="text-3xl font-bold text-white">AI Insights</h1>
@@ -187,8 +191,9 @@ export default function InsightsPage() {
               <p className="text-gray-500 text-sm">{metric.label}</p>
             </div>
           ))}
+          </div>
         </div>
-      </div>
-    </CyberpunkLayout>
+      </CyberpunkLayout>
+    </RequireAuth>
   );
 }
