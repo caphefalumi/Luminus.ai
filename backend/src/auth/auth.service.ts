@@ -13,25 +13,9 @@ export class AuthService implements OnModuleInit {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
 
-  // Create admin account on startup
+  // Removed: Demo admin account creation
   async onModuleInit() {
-    await this.createAdminAccount();
-  }
-
-  private async createAdminAccount() {
-    const existingAdmin = await this.userModel.findOne({ username: 'admin' });
-    if (!existingAdmin) {
-      const hashedPassword = this.hashPassword('123456789');
-      await this.userModel.create({
-        username: 'admin',
-        password: hashedPassword,
-        email: 'admin@luminus.ai',
-        name: 'Administrator',
-        picture: 'https://i.pravatar.cc/150?u=admin',
-        role: 'admin',
-      });
-      console.log('Admin account created: username=admin, password=123456789');
-    }
+    // No longer creates demo account
   }
 
   private hashPassword(password: string): string {
