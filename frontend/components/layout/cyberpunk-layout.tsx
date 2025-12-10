@@ -114,30 +114,29 @@ function NavButton({
 }
 
 function LoginButton({ isExpanded }: { isExpanded: boolean }) {
-  const { login } = useAuth();
-
   return (
     <div className="px-3 mb-4">
-      <motion.button
-        onClick={login}
-        className={cn(
-          "w-full flex items-center gap-3 px-3 py-3 rounded-xl",
-          "bg-gradient-to-r from-purple-500 to-teal-500",
-          "text-white font-medium",
-          "hover:opacity-90 transition-opacity"
-        )}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <LogIn className="w-5 h-5 flex-shrink-0" />
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isExpanded ? 1 : 0 }}
-          className="whitespace-nowrap text-sm"
+      <Link href="/login">
+        <motion.button
+          className={cn(
+            "w-full flex items-center gap-3 px-3 py-3 rounded-xl",
+            "bg-gradient-to-r from-purple-500 to-teal-500",
+            "text-white font-medium",
+            "hover:opacity-90 transition-opacity"
+          )}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
-          Sign In
-        </motion.span>
-      </motion.button>
+          <LogIn className="w-5 h-5 flex-shrink-0" />
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isExpanded ? 1 : 0 }}
+            className="whitespace-nowrap text-sm"
+          >
+            Sign In
+          </motion.span>
+        </motion.button>
+      </Link>
     </div>
   );
 }
