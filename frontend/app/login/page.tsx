@@ -252,15 +252,6 @@ function LoginContent() {
                   : "Already have an account? Sign In"}
               </button>
             </div>
-
-            {/* Demo Credentials Hint */}
-            {isLoginMode && (
-              <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
-                <p className="text-xs text-purple-300 text-center">
-                  Demo: username <span className="font-mono bg-purple-500/20 px-1 rounded">admin</span> / password <span className="font-mono bg-purple-500/20 px-1 rounded">123456789</span>
-                </p>
-              </div>
-            )}
           </form>
         </div>
 
